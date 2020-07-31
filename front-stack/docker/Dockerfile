@@ -7,7 +7,7 @@ COPY ./front-stack/ ./
 RUN ls -la ./
 RUN ls -la ./src
 RUN npm install -g @angular/cli@1.2.6
-RUN ng build --prod
+RUN ng build --base-href /front/ --prod
 #RUN ng build --prod  --deploy-url 'bga/'
 
 
