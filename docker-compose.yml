@@ -1,0 +1,44 @@
+version: '3.5'
+services:
+
+  ha-stack:
+    image: haproxy:2.1.2
+    container_name: ha-stack
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./ha-stack/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+      # - /etc/ssl/ymougenel.tech:/etc/ssl/
+    ports:
+      - 80:80
+    networks:
+      - web-stack
+
+  nginx-stack:
+    image: slonepi/nginx-stack:0.0.1
+    container_name: nginx-stack
+    build:
+      dockerfile: front-stack/docker/Dockerfile
+      context: ./
+    ports:
+      - 9280:80
+    networks:
+    - web-stack
+
+  # rsyslog:
+  #   image: rsyslog:2.0.1
+  #   ports:
+  #     - 514:514
+  #   cap_add:
+  #     - NET_ADMIN
+  #   volumes:
+  #     - ./log/:/var/log/
+  #     - ./rsyslog_conf/:/etc/rsyslog.d/
+  #   command: ["/usr/sbin/rsyslogd", "-n"]
+  #   networks:
+  #     - web-stack
+
+networks:
+  web-stack:
+    name: web-stack-net
+    driver: bridge
